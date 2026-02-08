@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our First Valentine's Week 🌹</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #f67280 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .petals-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .petal {
+            position: absolute;
+            font-size: 25px;
+            animation: fall 15s infinite;
+            opacity: 0;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            color: #e63946;
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            color: #555;
+            font-size: 18px;
+            font-style: italic;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .day-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid transparent;
+            animation: fadeInUp 0.6s ease-out backwards;
+            opacity: 0.6;
+        }
+
+        .day-card[onclick] {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .day-card[onclick]:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: #e63946;
+        }
+
+        .day-card:nth-child(1) { animation-delay: 0.1s; }
+        .day-card:nth-child(2) { animation-delay: 0.2s; }
+        .day-card:nth-child(3) { animation-delay: 0.3s; }
+        .day-card:nth-child(4) { animation-delay: 0.4s; }
+        .day-card:nth-child(5) { animation-delay: 0.5s; }
+        .day-card:nth-child(6) { animation-delay: 0.6s; }
+        .day-card:nth-child(7) { animation-delay: 0.7s; }
+        .day-card:nth-child(8) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .day-card.active {
+            border-color: #e63946;
+            background: linear-gradient(135deg, #fff 0%, #ffe0e0 100%);
+        }
+
+        .day-emoji {
+            font-size: 50px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .day-date {
+            color: #e63946;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .day-name {
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .message-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .message-box.show {
+            display: block;
+        }
+
+        .message-box h2 {
+            color: #e63946;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .message-box .content {
+            color: #444;
+            font-size: 18px;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .close-btn {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 25px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #d62839;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            .day-card {
+                padding: 20px 15px;
+            }
+            .day-emoji {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="petals-bg" id="petals-bg"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🌹 Our First Valentine's Week 💕</h1>
+            <p class="subtitle">7th - 14th February 2026</p>
+        </div>
+
+        <div class="calendar-grid">
+            <div class="day-card" onclick="showMessage('rose')">
+                <span class="day-emoji">🌹</span>
+                <div class="day-date">7th Feb</div>
+                <div class="day-name">Rose Day</div>
+            </div>
+
+            <div class="day-card" onclick="showMessage('propose')">
+                <span class="day-emoji">💍</span>
+                <div class="day-date">8th Feb</div>
+                <div class="day-name">Propose Day</div>
+            </div>
+
+            <div class="day-card" onclick="showMessage('chocolate')">
+                <span class="day-emoji">🍫</span>
+                <div class="day-date">9th Feb</div>
+                <div class="day-name">Chocolate Day</div>
+            </div>
+
+            <div class="day-card">
+                <span class="day-emoji">🧸</span>
+                <div class="day-date">10th Feb</div>
+                <div class="day-name">Teddy Day</div>
+            </div>
+
+            <div class="day-card">
+                <span class="day-emoji">🤝</span>
+                <div class="day-date">11th Feb</div>
+                <div class="day-name">Promise Day</div>
+            </div>
+
+            <div class="day-card">
+                <span class="day-emoji">🤗</span>
+                <div class="day-date">12th Feb</div>
+                <div class="day-name">Hug Day</div>
+            </div>
+
+            <div class="day-card">
+                <span class="day-emoji">💋</span>
+                <div class="day-date">13th Feb</div>
+                <div class="day-name">Kiss Day</div>
+            </div>
+
+            <div class="day-card">
+                <span class="day-emoji">❤️</span>
+                <div class="day-date">14th Feb</div>
+                <div class="day-name">Valentine's Day</div>
+            </div>
+        </div>
+
+        <div class="message-box" id="message-box">
+            <h2 id="message-title"></h2>
+            <div class="content" id="message-content"></div>
+            <button class="close-btn" onclick="closeMessage()">Close 💕</button>
+        </div>
+    </div>
+
+    <script>
+        const messages = {
+            rose: {
+                title: "🌹 Rose Day - 7th February 🌹",
+                content: `<p style="font-size: 20px; margin-bottom: 20px;"><strong>Arre Ikshadhari Billi! 😁</strong></p>
+                <p style="margin-bottom: 15px;">Yeh hamara pehla Valentine's week hai! Aaj Rose Day hai, aur main jaanta hoon tumhe roses pasand nahi hai, so tumhare liye woh sticker bheja tha jo tumhe pasand tha! 🌸</p>
+                <p style="margin-bottom: 15px;">Lekin sach bataun? Valentine's week toh chal raha hai, par mere liye <strong>every day is Rose Day</strong>! ❣️</p>
+                <p style="margin-bottom: 15px;">Har din Valentine's week ka har din hai mere liye... kyunki tum ho na! 💕</p>
+                <p style="font-size: 22px; font-weight: bold; color: #e63946; margin-top: 25px;">Happy Rose Day, Meri Ikshadhari Billi! 🌹😁❣️</p>
+                <p style="font-style: italic; margin-top: 20px; color: #666;">P.S. - Tumhare bina har din adhoora hai, tumhare saath har din special! 💖</p>`
+            },
+            propose: {
+                title: "💍 Propose Day - 8th February 💍",
+                content: `<p style="font-size: 20px; margin-bottom: 20px;"><strong>Meri Pyaari Ikshadhari Billi! 💕</strong></p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you the way you tell me everything, sharing every little moment of your day with me 💕</p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you the way you care for me, always checking if I'm okay, making me feel like I truly matter 🌹</p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you the way you calm me down, your words like a soothing balm to my restless heart 🤗</p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you when you show your anger - because even your frustration is adorable! 😁</p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you the way you show your love, those sweet messages and emojis that make my heart race 😘</p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you when you gave me the cute name "Cutie" - it makes me smile every single time you call me that 🥰</p>
+                
+                <p style="margin-top: 30px; margin-bottom: 20px; font-size: 19px; line-height: 1.6;">Tumse baat karte waqt time kaise nikal jaata hai pata hi nahi chalta... har message ka intezaar rehta hai. Tumhari har baat, har thought, har feeling... sab kuch special lagta hai mujhe. 💭✨</p>
+                
+                <p style="font-size: 24px; font-weight: bold; color: #e63946; margin-top: 35px; margin-bottom: 20px;">Will you be mine? Forever and always? 💍</p>
+                
+                <p style="font-size: 20px; font-weight: bold; color: #e63946; margin-bottom: 25px;">Kya tum meri ho jaogi? ❤️</p>
+                
+                <p style="font-style: italic; margin-top: 25px; color: #666; font-size: 17px;">P.S. - I promise to always make you smile, to support your dreams, and to love you more with each passing day! 🌹💕</p>`
+            },
+            chocolate: {
+                title: "🍫 Chocolate Day - 9th February 🍫",
+                content: `<p style="font-size: 20px; margin-bottom: 20px;"><strong>Meri Sweet Ikshadhari Billi! 🍫💕</strong></p>
+                
+                <p style="margin-bottom: 25px; font-size: 20px; line-height: 1.6; color: #e63946; font-weight: bold; text-align: center; background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 192, 203, 0.2)); padding: 15px; border-radius: 12px;">
+                ✨ These are the sweetest moments of my life... moments that I'll cherish forever! 💖✨
+                </p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">Chocolate Day! Aur aaj main tumhe kuch sweet memories yaad dilana chahta hoon... ✨</p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Yaad hai woh pal? 😁</strong><br><br>
+                Jab maine pucha tha "Main tumhara kya hoon?"<br>
+                Aur tumne bola tha "Tum mere good friend ho!" 😄<br><br>
+                Mere liye yeh badi baat thi ki main kisi ka good friend hoon... kyunki tum mere liye pehle se hi special thi! 💓
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Aur woh moment! 🥺💗</strong><br><br>
+                Jab tumne kaha tha:<br>
+                "Uh I'm happy to have u as my close one 💗🥲🤞🏻🫣🤭"<br><br>
+                Us din pata nahi kitni baar maine yeh message padha... kyunki yeh sab baatein mere liye bohot badi hain! Tum mere "close one" ho - yeh sunke dil khush ho gaya tha! 🌟💕
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6;">Lekin sach kehna chahta hoon... tumhare mere life mein aane se ek aur cheez hui hai - <strong style="color: #e63946;">mujhe ek naya reason mil gaya</strong> apne pe focus karne ka! 🎯✨</p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6;">Ab main jaldi se kuch karna chahta hoon... apni family ke liye, apne sapno ke liye... aur sabse important, <strong style="color: #e63946;">is family mein tumhe laane ke liye!</strong> 👨‍👩‍👧‍👦💕</p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6;">Sach bataun? Maine kabhi socha bhi nahi tha ki mere life mein koi aisi aayegi jo mujhe itni achi tarah se samjhegi... jo mere har baat ko, har feeling ko samjhegi. 🥺💖</p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6;">Zindagi pehle bhi chalti thi, par ab tum ho toh har din <strong>chocolates ki tarah sweet</strong> ban gaya hai! 🍫✨</p>
+                
+                <p style="font-size: 22px; font-weight: bold; color: #e63946; margin-top: 30px; margin-bottom: 20px;">You're sweeter than any chocolate in this world! 🍫❤️</p>
+                
+                <p style="font-style: italic; margin-top: 25px; color: #666; font-size: 17px;">P.S. - From "good friend" to "close one" to the love of my life... this is just the beginning of our beautiful journey together! Ab se toh aur bhi khubsurat moments banenge... aur main har ek moment ko tumhare saath jeena chahta hoon! 🌹💕🍫</p>`
+            },
+            teddy: {
+                title: "🧸 Teddy Day - 10th February 🧸",
+                content: `<p style="margin-bottom: 15px;">Teddy Day! Teddy toh bahut cute hote hain, par tum toh usse bhi zyada cute ho! 🧸💕</p>
+                <p style="margin-bottom: 15px;">Tumhare saath har din comfortable aur warm feel hota hai! 🤗</p>
+                <p style="font-size: 20px; font-weight: bold; color: #e63946; margin-top: 20px;">You're my cuddly, adorable everything! 🧸❤️</p>`
+            },
+            promise: {
+                title: "🤝 Promise Day - 11th February 🤝",
+                content: `<p style="margin-bottom: 15px;">Promise Day! Aaj main tumse kuch promises karna chahta hoon... 🤝</p>
+                <p style="margin-bottom: 15px;">🌟 Hamesha tumhara saath dunga<br>🌟 Tumhe hamesha hasaata rahunga<br>🌟 Kabhi tumhe akela nahi chhodunga<br>🌟 Tumhare sapno ka support karunga</p>
+                <p style="font-size: 20px; font-weight: bold; color: #e63946; margin-top: 20px;">I promise to love you, today and always! 💕</p>`
+            },
+            hug: {
+                title: "🤗 Hug Day - 12th February 🤗",
+                content: `<p style="margin-bottom: 15px;">Hug Day! Tumhari hug mein jo sukoon milta hai, woh kisi aur cheez mein nahi! 🤗💕</p>
+                <p style="margin-bottom: 15px;">Bas tumhe hug karna chahta hoon... aur kabhi nahi chhodna! ✨</p>
+                <p style="font-size: 20px; font-weight: bold; color: #e63946; margin-top: 20px;">Sending you the warmest virtual hug! 🤗❤️</p>`
+            },
+            kiss: {
+                title: "💋 Kiss Day - 13th February 💋",
+                content: `<p style="margin-bottom: 15px;">Kiss Day! Tumhare pyaar mein woh jadoo hai jo sab kuch khoobsurat bana deta hai! 💋💕</p>
+                <p style="margin-bottom: 15px;">Har kiss, har touch, har moment... sab magical! ✨</p>
+                <p style="font-size: 20px; font-weight: bold; color: #e63946; margin-top: 20px;">You make my heart skip a beat! 💋❤️</p>`
+            },
+            valentine: {
+                title: "❤️ Valentine's Day - 14th February ❤️",
+                content: `<p style="margin-bottom: 15px;">Valentine's Day! The BIG DAY! 🎉❤️</p>
+                <p style="margin-bottom: 15px;">Lekin sach toh yeh hai ki mere liye har din Valentine's Day hai tumhare saath! 💕</p>
+                <p style="margin-bottom: 15px;">Tum ho toh har din special hai, har pal yaadgaar hai! ✨</p>
+                <p style="font-size: 22px; font-weight: bold; color: #e63946; margin-top: 25px;">Happy Valentine's Day, My Love! ❤️</p>
+                <p style="font-style: italic; margin-top: 20px;">Thank you for being YOU, for being MINE, and for making this our FIRST Valentine's Week together! 💖</p>`
+            }
+        };
+
+        function showMessage(day) {
+            const messageBox = document.getElementById('message-box');
+            const title = document.getElementById('message-title');
+            const content = document.getElementById('message-content');
+            
+            title.textContent = messages[day].title;
+            content.innerHTML = messages[day].content;
+            
+            messageBox.classList.add('show');
+            messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Update active card
+            document.querySelectorAll('.day-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        function closeMessage() {
+            document.getElementById('message-box').classList.remove('show');
+        }
+
+        // Create falling petals
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            const petals = ['🌹', '🌺', '🌸', '💮', '💐'];
+            petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDuration = (Math.random() * 5 + 10) + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            document.getElementById('petals-bg').appendChild(petal);
+            
+            setTimeout(() => {
+                petal.remove();
+            }, 20000);
+        }
+
+        // Create petals continuously
+        setInterval(createPetal, 1000);
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createPetal, i * 200);
+        }
+    </script>
+</body>
+</html>
