@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our First Valentine's Week 🌹</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c06c84 50%, #f67280 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .petals-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .petal {
+            position: absolute;
+            font-size: 25px;
+            animation: fall 15s infinite;
+            opacity: 0;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            color: #e63946;
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            color: #555;
+            font-size: 18px;
+            font-style: italic;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .day-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 3px solid transparent;
+            animation: fadeInUp 0.6s ease-out backwards;
+            opacity: 0.6;
+        }
+
+        .day-card[onclick] {
+            cursor: pointer;
+            opacity: 1;
+        }
+
+        .day-card[onclick]:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: #e63946;
+        }
+
+        .day-card:nth-child(1) { animation-delay: 0.1s; }
+        .day-card:nth-child(2) { animation-delay: 0.2s; }
+        .day-card:nth-child(3) { animation-delay: 0.3s; }
+        .day-card:nth-child(4) { animation-delay: 0.4s; }
+        .day-card:nth-child(5) { animation-delay: 0.5s; }
+        .day-card:nth-child(6) { animation-delay: 0.6s; }
+        .day-card:nth-child(7) { animation-delay: 0.7s; }
+        .day-card:nth-child(8) { animation-delay: 0.8s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .day-card.active {
+            border-color: #e63946;
+            background: linear-gradient(135deg, #fff 0%, #ffe0e0 100%);
+        }
+
+        .day-emoji {
+            font-size: 50px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .day-date {
+            color: #e63946;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .day-name {
+            color: #333;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .message-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            animation: scaleIn 0.5s ease-out;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .message-box.show {
+            display: block;
+        }
+
+        .message-box h2 {
+            color: #e63946;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .message-box .content {
+            color: #444;
+            font-size: 18px;
+            line-height: 1.8;
+            text-align: center;
+        }
+
+        .close-btn {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 25px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #d62839;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 32px;
+            }
+            .calendar-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 15px;
+            }
+            .day-card {
+                padding: 20px 15px;
+            }
+            .day-emoji {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="petals-bg" id="petals-bg"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🌹 Our First Valentine's Week 💕</h1>
+            <p class="subtitle">7th - 14th February 2026</p>
+        </div>
+
+        <div class="calendar-grid">
+            <div class="day-card" onclick="showMessage('rose')">
+                <span class="day-emoji">🌹</span>
+                <div class="day-date">7th Feb</div>
+                <div class="day-name">Rose Day</div>
+            </div>
+
+            <div class="day-card" onclick="showMessage('propose')">
+                <span class="day-emoji">💍</span>
+                <div class="day-date">8th Feb</div>
+                <div class="day-name">Propose Day</div>
+            </div>
+
+            <div class="day-card" onclick="showMessage('chocolate')">
+                <span class="day-emoji">🍫</span>
+                <div class="day-date">9th Feb</div>
+                <div class="day-name">Chocolate Day</div>
+            </div>
+
+            <div class="day-card" onclick="showMessage('teddy')">
+                <span class="day-emoji">🧸</span>
+                <div class="day-date">10th Feb</div>
+                <div class="day-name">Teddy Day</div>
+            </div>
+
+            <div class="day-card" onclick="showMessage('promise')">
+                <span class="day-emoji">🤝</span>
+                <div class="day-date">11th Feb</div>
+                <div class="day-name">Promise Day</div>
+            </div>
+
+            <div class="day-card" onclick="showMessage('hug')">
+                <span class="day-emoji">🤗</span>
+                <div class="day-date">12th Feb</div>
+                <div class="day-name">Hug Day</div>
+            </div>
+
+            <div class="day-card" onclick="showMessage('kiss')">
+                <span class="day-emoji">💋</span>
+                <div class="day-date">13th Feb</div>
+                <div class="day-name">Kiss Day</div>
+            </div>
+
+            <div class="day-card" onclick="showMessage('valentine')">
+                <span class="day-emoji">❤️</span>
+                <div class="day-date">14th Feb</div>
+                <div class="day-name">Valentine's Day</div>
+            </div>
+        </div>
+
+        <div class="message-box" id="message-box">
+            <h2 id="message-title"></h2>
+            <div class="content" id="message-content"></div>
+            <button class="close-btn" onclick="closeMessage()">Close 💕</button>
+        </div>
+    </div>
+
+    <script>
+        const messages = {
+            rose: {
+                title: "🌹 Rose Day - 7th February 🌹",
+                content: `<p style="font-size: 20px; margin-bottom: 20px;"><strong>Arre Ikshadhari Billi! 😁</strong></p>
+                <p style="margin-bottom: 15px;">Yeh hamara pehla Valentine's week hai! Aaj Rose Day hai, aur main jaanta hoon tumhe roses pasand nahi hai, so tumhare liye woh sticker bheja tha jo tumhe pasand tha! 🌸</p>
+                <p style="margin-bottom: 15px;">Lekin sach bataun? Valentine's week toh chal raha hai, par mere liye <strong>every day is Rose Day</strong>! ❣️</p>
+                <p style="margin-bottom: 15px;">Har din Valentine's week ka har din hai mere liye... kyunki tum ho na! 💕</p>
+                <p style="font-size: 22px; font-weight: bold; color: #e63946; margin-top: 25px;">Happy Rose Day, Meri Ikshadhari Billi! 🌹😁❣️</p>
+                <p style="font-style: italic; margin-top: 20px; color: #666;">P.S. - Tumhare bina har din adhoora hai, tumhare saath har din special! 💖</p>`
+            },
+            propose: {
+                title: "💍 Propose Day - 8th February 💍",
+                content: `<p style="font-size: 20px; margin-bottom: 20px;"><strong>Meri Pyaari Ikshadhari Billi! 💕</strong></p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you the way you tell me everything, sharing every little moment of your day with me 💕</p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you the way you care for me, always checking if I'm okay, making me feel like I truly matter 🌹</p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you the way you calm me down, your words like a soothing balm to my restless heart 🤗</p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you when you show your anger - because even your frustration is adorable! 😁</p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you the way you show your love, those sweet messages and emojis that make my heart race 😘</p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">I fell in love with you when you gave me the cute name "Cutie" - it makes me smile every single time you call me that 🥰</p>
+                
+                <p style="margin-top: 30px; margin-bottom: 20px; font-size: 19px; line-height: 1.6;">Tumse baat karte waqt time kaise nikal jaata hai pata hi nahi chalta... har message ka intezaar rehta hai. Tumhari har baat, har thought, har feeling... sab kuch special lagta hai mujhe. 💭✨</p>
+                
+                <p style="font-size: 24px; font-weight: bold; color: #e63946; margin-top: 35px; margin-bottom: 20px;">Will you be mine? Forever and always? 💍</p>
+                
+                <p style="font-size: 20px; font-weight: bold; color: #e63946; margin-bottom: 25px;">Kya tum meri ho jaogi? ❤️</p>
+                
+                <p style="font-style: italic; margin-top: 25px; color: #666; font-size: 17px;">P.S. - I promise to always make you smile, to support your dreams, and to love you more with each passing day! 🌹💕</p>`
+            },
+            chocolate: {
+                title: "🍫 Chocolate Day - 9th February 🍫",
+                content: `<p style="font-size: 20px; margin-bottom: 20px;"><strong>Meri Sweet Ikshadhari Billi! 🍫💕</strong></p>
+                
+                <p style="margin-bottom: 25px; font-size: 20px; line-height: 1.6; color: #e63946; font-weight: bold; text-align: center; background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 192, 203, 0.2)); padding: 15px; border-radius: 12px;">
+                ✨ These are the sweetest moments of my life... moments that I'll cherish forever! 💖✨
+                </p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6;">Chocolate Day! Aur aaj main tumhe kuch sweet memories yaad dilana chahta hoon... ✨</p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Yaad hai woh pal? 😁</strong><br><br>
+                Jab maine pucha tha "Main tumhara kya hoon?"<br>
+                Aur tumne bola tha "Tum mere good friend ho!" 😄<br><br>
+                Mere liye yeh badi baat thi ki main kisi ka good friend hoon... kyunki tum mere liye pehle se hi special thi! 💓
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Aur woh moment! 🥺💗</strong><br><br>
+                Jab tumne kaha tha:<br>
+                "Uh I'm happy to have u as my close one 💗🥲🤞🏻🫣🤭"<br><br>
+                Us din pata nahi kitni baar maine yeh message padha... kyunki yeh sab baatein mere liye bohot badi hain! Tum mere "close one" ho - yeh sunke dil khush ho gaya tha! 🌟💕
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6;">Lekin sach kehna chahta hoon... tumhare mere life mein aane se ek aur cheez hui hai - <strong style="color: #e63946;">mujhe ek naya reason mil gaya</strong> apne pe focus karne ka! 🎯✨</p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6;">Ab main jaldi se kuch karna chahta hoon... apni family ke liye, apne sapno ke liye... aur sabse important, <strong style="color: #e63946;">is family mein tumhe laane ke liye!</strong> 👨‍👩‍👧‍👦💕</p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6;">Sach bataun? Maine kabhi socha bhi nahi tha ki mere life mein koi aisi aayegi jo mujhe itni achi tarah se samjhegi... jo mere har baat ko, har feeling ko samjhegi. 🥺💖</p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6;">Zindagi pehle bhi chalti thi, par ab tum ho toh har din <strong>chocolates ki tarah sweet</strong> ban gaya hai! 🍫✨</p>
+                
+                <p style="font-size: 22px; font-weight: bold; color: #e63946; margin-top: 30px; margin-bottom: 20px;">You're sweeter than any chocolate in this world! 🍫❤️</p>
+                
+                <p style="font-style: italic; margin-top: 25px; color: #666; font-size: 17px;">P.S. - From "good friend" to "close one" to the love of my life... this is just the beginning of our beautiful journey together! Ab se toh aur bhi khubsurat moments banenge... aur main har ek moment ko tumhare saath jeena chahta hoon! 🌹💕🍫</p>`
+            },
+            teddy: {
+                title: "🧸 Teddy Day - 10th February 🧸",
+                content: `<p style="font-size: 20px; margin-bottom: 20px;"><strong>Meri Cute Teddy! 🧸💕</strong></p>
+                
+                <p style="margin-bottom: 20px; font-size: 20px; line-height: 1.6; color: #e63946; font-weight: bold; text-align: center; background: linear-gradient(135deg, rgba(255, 182, 193, 0.2), rgba(255, 218, 185, 0.2)); padding: 15px; border-radius: 12px;">
+                Aaj Teddy Day hai... aur mere paas bhi hai ek cute teddy - Meri Ikshadhari Billi! 😁❤️
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6;"><strong style="color: #e63946;">Tum meri teddy kaise ho?</strong></p>
+                
+                <p style="margin-bottom: 15px; font-size: 18px; line-height: 1.7;">Kyunki tum bohot bohot cute ho 🥰... itni pyaari ho ki tumhare messages padhte hi dil khush ho jaata hai! 💞</p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Aur jab tumhari picture dekhta hoon, tumhe dekhta hoon... mera heartbeat tez ho jaata hai! 🫣💞 Tumhe dekh ke aisa lagta hai jaise duniya ruk gayi ho, aur bas tum ho... sirf tum! 💓✨</p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Teddy bears ko hug karne se sukoon milta hai na? Waise hi tumse baat karne se, tumhare baare mein sochne se... ek alag hi sukoon milta hai mujhe! ✨</p>
+                
+                <p style="margin-bottom: 25px; font-size: 19px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Ek baat batau? 💭</strong><br><br>
+                Humari life mein kuch kuch baatein hoti hain jo hum kisi ko jaldi share nahi karte... par ab mujhe lag raha hai ki koi hai jisse main without any hesitation sab kuch bata sakta hoon. Tum ho na mere saath, toh dar lagta hi nahi! 🤗💕
+                </p>
+                
+                <p style="margin-bottom: 18px; font-size: 18px; line-height: 1.7;">Pata hai? Jab tumse baat karta hoon, toh automatically ek smile aa jaati hai... 😊</p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Aur kabhi kabhi kuch karte karte, bina kisi reason ke tumhare baare mein soch leta hoon... aur phir se wahi smile! It's like tum hamesha mere thoughts mein ho, making everything better! 💭✨</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; font-style: italic; color: #666; background: rgba(230, 57, 70, 0.05); padding: 15px; border-radius: 10px;">
+                Yeh sab days toh gifts wale hain... aur main tumhe koi physical gift nahi de pa raha 🥲<br><br>
+                Par sach bataun? Tum jo ho mere liye, tum jo care karti ho, tum jo mujhe samajhti ho... yeh sab se bada gift hai mere liye! Tumhara saath hi sabse bada gift hai! 🎁💖
+                </p>
+                
+                <p style="font-size: 22px; font-weight: bold; color: #e63946; margin-top: 30px; margin-bottom: 20px;">You're my cuddly, adorable, precious everything! 🧸❤️</p>
+                
+                <p style="font-style: italic; margin-top: 25px; color: #666; font-size: 17px;">P.S. - Teddy bears give comfort, but you give me happiness, peace, and a reason to smile every single day! Thank you for being my teddy! 🧸💕</p>`
+            },
+            promise: {
+                title: "🤝 Promise Day - 11th February 🤝",
+                content: `<p style="font-size: 20px; margin-bottom: 20px;"><strong>Meri Ikshadhari Billi! 🤝💕</strong></p>
+                
+                <p style="margin-bottom: 25px; font-size: 20px; line-height: 1.6; color: #e63946; font-weight: bold; text-align: center; background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 192, 203, 0.2)); padding: 15px; border-radius: 12px;">
+                Today is Promise Day 🤝✨
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Promising today is not compulsory... kyunki agar mujhe tumse kuch promise karna hai, toh main kisi bhi din kar sakta hoon. Main is din ka intezaar nahi karunga! 💕</p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Lekin ek baat hai jo mujhe bilkul pasand nahi... <strong style="color: #e63946;">promises dena aur phir yaad na rakhna</strong> ki tumne apne partner se kya promise kiya tha. Yeh bahut buri baat hai! 😔</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Isliye aaj main sirf woh promises karunga jo main pakka yaad rakhunga... 💭</strong><br><br>
+                Taaki main apni precious one se kiye gaye promise ko kabhi na todu! 💞<br>
+                Main kuch bhi anjane mein todna nahi chahta... ❤️
+                </p>
+                
+                <p style="margin-bottom: 15px; font-size: 19px; line-height: 1.6; color: #e63946; font-weight: bold;">Meri Promises:</p>
+                
+                <p style="margin-bottom: 12px; font-size: 18px; line-height: 1.7;">🌟 I promise to keep you smiling always</p>
+                <p style="margin-bottom: 12px; font-size: 18px; line-height: 1.7;">🌟 I promise I will always be by your side</p>
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7;">🌟 I promise that I will never leave you alone</p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7; font-style: italic; color: #666;">Aur bhi bahut saare promises hain... par main sirf yeh likhunga. Shayad main aur bhi likh sakta hoon, but right now mere POV se yeh kaafi hai. 💕</p>
+                
+                <p style="margin-bottom: 25px; font-size: 19px; line-height: 1.7; background: rgba(230, 57, 70, 0.08); padding: 20px; border-radius: 15px;">
+                <strong style="color: #e63946;">Ek important baat... 💭</strong><br><br>
+                Aisa nahi hai ki agar humne kuch promise nahi kiya, toh hum kuch bhi easily kar sakte hain...<br><br>
+                <strong style="color: #e63946;">Kyunki humne ek dusre ka proposal accept kiya hai!</strong> 💍<br><br>
+                Yeh sirf attachment ya short-term relationship nahi hai... <strong>yeh eternity ke liye hai</strong> - ki hum hamesha ek dusre ke rahenge, aur <strong>har ek janam mein</strong> ek dusre se pyaar karenge! 🌟💕
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Jab main samajhta hoon ki tum is relationship ko kaise dekhti ho - not for short-term love, attraction, ya attachment - <strong style="color: #e63946;">main sachmuch amazed feel karta hoon!</strong> ✨</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Ek memory yaad aa gayi... 💭</strong><br><br>
+                2-3 years pehle, mere friend ne kaha tha:<br>
+                <em>"Is generation mein ek achi ladki se shaadi karna... it's like finding something in the ocean. You may find it, but don't expect it."</em> 🌊<br><br>
+                Us time mujhe sach mein pata nahi tha ki mere life mein kaun aayegi...<br><br>
+                Lekin aaj, jab main tumhe dekhta hoon, tumse baat karta hoon... <strong style="color: #e63946;">mujhe woh din yaad aa jaata hai jab main aur mera friend is baare mein baat kar rahe the!</strong> 🥺💖<br><br>
+                Aur sach kehna chahta hoon - <strong>tumhe paake main khud ko sabse lucky feel karta hoon!</strong> 🍀💕
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.7;">Hum ek relationship mein hain... <strong style="color: #e63946;">aur yeh khud mein ek promise hai!</strong> 💍</p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.7;">Humare promises already exist. We don't need to give promises to each other just for assurance... <strong>kyunki tumhara aur mera dil already connected hai!</strong> 💓✨</p>
+                
+                <p style="font-size: 22px; font-weight: bold; color: #e63946; margin-top: 30px; margin-bottom: 20px;">I promise to love you, today and always! 💕</p>
+                
+                <p style="font-style: italic; margin-top: 25px; color: #666; font-size: 17px;">P.S. - Promises are not just words... they are commitments made from the heart. And my heart is fully committed to you, forever! 🤝❤️</p>`
+            },
+            hug: {
+                title: "🤗 Hug Day - 12th February 🤗",
+                content: `<p style="font-size: 20px; margin-bottom: 20px;"><strong>My Bachu! 🤗💞</strong></p>
+                
+                <p style="margin-bottom: 25px; font-size: 20px; line-height: 1.6; color: #e63946; font-weight: bold; text-align: center; background: linear-gradient(135deg, rgba(255, 182, 193, 0.2), rgba(255, 218, 185, 0.2)); padding: 15px; border-radius: 12px;">
+                Today is Hug Day 🤗✨
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">We are in long distance... toh main tumhe hug nahi kar sakta aur tum bhi nahi kar sakti... 🥺</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Lekin reality check yeh hai... 😅</strong><br><br>
+                Agar hum same place mein bhi hote, toh shayad main phir bhi nahi kar paata itni jaldi! 😅<br>
+                Mujhse yeh jaldi nahi ho paata...<br><br>
+                <em style="font-size: 16px;">(Oyee hasiyo nii 😤😂)</em>
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Haan, yeh baat main kayi baar bol chuka hoon tumhe... <strong style="color: #e63946;">par mujhe khud realize nahi hua tha ki hamari bonding time ke saath kaise badhti jaa rahi thi!</strong> 💛</p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Kyunki mujhe kisi se baat karte waqt usually sochna padta hai... <strong style="color: #e63946;">but tumse na tab sochna padta tha, na ab padta hai!</strong> 💛✨</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(230, 57, 70, 0.08); padding: 20px; border-radius: 15px;">
+                <strong style="color: #e63946;">Aur yeh sticker-sticker wali baatein... 💭</strong><br><br>
+                Tumhe maza aata hai, bore nahi hoti... <strong>aur honestly mujhe bhi!</strong> 😊<br><br>
+                Many people would get bored talking daily in the same way, using same stickers...<br><br>
+                <strong style="color: #e63946;">Par pata nahi kyun, tumhare saath kabhi boring laga hi nahi!</strong> 💕✨
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 19px; line-height: 1.7; font-style: italic; color: #666;">So kahi na kahi... <strong style="color: #e63946;">mere dil ko apnapan lag gaya hoga tumse</strong> ❤️<br><br>Isliye itni naturally baat ho jati thi us time se... jo mujhe tab samajh nahi aaya tha, <strong>par ab aa gaya hai!</strong> 🥺💖</p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Mujhe kabhi kabhi lagta hai ki main apne baare mein sab kuch bata du... ya tum batao aur main bas sunta rahun... 💭</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7;">Phir sochta hoon <em>nahi, sab ek hi time pe nahi.</em> <strong style="color: #e63946;">Dheere dheere hi sahi...</strong> kyunki journey enjoy karna bhi toh zaroori hai! 🌟💕</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Pehle main sochta tha... 🤔</strong><br><br>
+                <em>"Kaise koi daily baat kar sakta hai? Same person se, roz?"</em><br><br>
+                <strong style="color: #e63946;">Ab samajh aaya...</strong> ✨<br><br>
+                Agar kisi se sach mein connection ho, ya love ho, toh <strong>topic ki zarurat hi nahi padti.</strong><br>
+                Khud-ba-khud sab ho jata hai! 💕✨
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.7; color: #e63946; font-weight: bold;">Ek hope hai... 🤍</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7;">Jab bhi hum milenge, tab tak I hope mere andar itne guts aa jaye ki main tumhe properly hug kar saku! 🤍🥺</p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Kyunki tumhe hug karna... it's not just a physical gesture. <strong style="color: #e63946;">It's me telling you that you're safe with me, that I'm here for you, always.</strong> 💓</p>
+                
+                <p style="font-size: 22px; font-weight: bold; color: #e63946; margin-top: 30px; margin-bottom: 20px; text-align: center;">Filhaal offline nahi... online hi sahi —<br>Happy Hug Day, Bachu! 🤗💞</p>
+                
+                <p style="font-style: italic; margin-top: 25px; color: #666; font-size: 17px;">P.S. - Sending you the warmest, tightest virtual hug... until the day I can hold you for real! 🤗❤️✨</p>`
+            },
+            kiss: {
+                title: "💋 Kiss Day - 13th February 💋",
+                content: `<p style="font-size: 20px; margin-bottom: 20px;"><strong>Happy Kiss Day, Bachu! 😘💗</strong></p>
+                
+                <p style="margin-bottom: 25px; font-size: 20px; line-height: 1.6; text-align: center;">
+                <span style="font-size: 40px;">🐻‍❄️💕🐰</span><br>
+                <em style="color: #e63946; font-size: 18px;">Dudu aur Bubu ki taraf se bhi!</em>
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7; font-style: italic; color: #666;">Ahan... 💭<br>It took me time to think and write this, kyunki yeh thoda complicated hai...</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Kiss Day... ek gesture hai, ek way to show love 💋</strong><br><br>
+                But it's not necessary ki hume ek dusre ko kiss karna hi padega to show our love...<br><br>
+                <strong style="color: #e63946;">Pyaar dikhane ke bahut saare tarike hain!</strong> 💕
+                </p>
+                
+                <p style="margin-bottom: 15px; font-size: 18px; line-height: 1.7;">We can express our love in many ways:</p>
+                
+                <p style="margin-bottom: 12px; font-size: 18px; line-height: 1.7;">💬 By talking, really talking...</p>
+                <p style="margin-bottom: 12px; font-size: 18px; line-height: 1.7;">✨ By expressing ourselves openly</p>
+                <p style="margin-bottom: 12px; font-size: 18px; line-height: 1.7;">🤗 Through small gestures of care</p>
+                <p style="margin-bottom: 12px; font-size: 18px; line-height: 1.7;">👀 Just by being present, by listening</p>
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7;">💭 By understanding without words...</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(230, 57, 70, 0.08); padding: 20px; border-radius: 15px;">
+                <strong style="color: #e63946;">Sach kehna chahta hoon... 💭</strong><br><br>
+                Yeh kiss toh ek tarika hai jab dono saath mein ho, physically present ho... toh kissing se love show karna. 💋<br><br>
+                <strong style="color: #e63946;">But that's just one way among so many!</strong> ✨
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 19px; line-height: 1.7; color: #e63946; font-weight: bold; text-align: center; background: linear-gradient(135deg, rgba(255, 182, 193, 0.2), rgba(255, 218, 185, 0.2)); padding: 20px; border-radius: 12px;">
+                But hume shayad ye sab pe utna dhyan nahi dena chahiye hai na, bachu? 👀💕
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;"><strong style="color: #e63946;">Because you know me na...</strong> 😊</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7;">Main woh type ka insaan hoon jo physical gestures se zyada... <strong style="color: #e63946;">emotional connection, understanding, aur presence ko zyada value deta hoon.</strong> 💕</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Tumhare saath... 💭✨</strong><br><br>
+                Jab hum baat karte hain, jab tum mujhe samajhti ho bina kuch kahe...<br>
+                Jab main tumhari messages padhta hoon aur smile aa jaati hai...<br>
+                Jab hum apne Dudu-Bubu stickers share karte hain... 🐻‍❄️🐰<br><br>
+                <strong style="color: #e63946;">Yeh sab mere liye kiss se zyada special hai!</strong> 💖<br><br>
+                Kyunki yeh sab <strong>dil se aata hai,</strong> naturally hota hai! ❤️
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">Haan, jab milenge toh shayad woh moment bhi aayega... <em>dheere dheere, naturally.</em> 💕</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7;">But abhi ke liye... <strong style="color: #e63946;">tumhara saath, tumhari baatein, tumhari understanding - yeh sab hi toh meri kiss hai!</strong> 😊💗</p>
+                
+                <p style="margin-bottom: 20px; font-size: 20px; line-height: 1.7; text-align: center;">
+                <span style="font-size: 35px;">🐻‍❄️💋🐰</span><br>
+                <em style="color: #e63946;">Dudu sending virtual kisses to Bubu!</em>
+                </p>
+                
+                <p style="font-size: 22px; font-weight: bold; color: #e63946; margin-top: 30px; margin-bottom: 20px; text-align: center;">Love isn't just in grand gestures...<br>It's in every small moment we share! 💋❤️</p>
+                
+                <p style="font-style: italic; margin-top: 25px; color: #666; font-size: 17px;">P.S. - Tumhare har message mein, har sticker mein, har smile mein... wahi toh mera kiss hai! Pyaar dikhane ke liye bas dil ka connection chahiye, aur woh toh hum dono ke beech already hai! 💕✨</p>`
+            },
+            valentine: {
+                title: "❤️ Valentine's Day - 14th February ❤️",
+                content: `
+                <div style="text-align: center; margin-bottom: 25px; background: linear-gradient(135deg, rgba(255, 107, 157, 0.1), rgba(255, 192, 203, 0.2)); padding: 15px; border-radius: 12px;">
+                    <button id="playBtn" onclick="document.getElementById('loveSong').play(); document.getElementById('playBtn').style.display='none'; document.getElementById('songPlaying').style.display='block';" style="background: #e63946; color: white; border: none; padding: 12px 25px; border-radius: 25px; font-size: 17px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3); transition: all 0.3s ease;">
+                        🎵 Play "Ishq Wala Love" 🎵
+                    </button>
+                    <div id="songPlaying" style="display: none;">
+                        <p style="font-size: 16px; color: #e63946; font-weight: bold; margin: 10px 0;">🎵 Now Playing: Ishq Wala Love 🎵</p>
+                        <p style="font-size: 14px; color: #666;">Song is playing in background... 💕</p>
+                        <button onclick="document.getElementById('loveSong').pause(); document.getElementById('playBtn').style.display='inline-block'; document.getElementById('songPlaying').style.display='none';" style="background: #999; color: white; border: none; padding: 8px 20px; border-radius: 20px; font-size: 14px; cursor: pointer; margin-top: 10px;">
+                            ⏸️ Pause
+                        </button>
+                    </div>
+                    <audio id="loveSong" loop>
+                        <source src="https://www.dropbox.com/scl/fi/q2un2emvkhdmo1en4360h/Ishq.mp3?rlkey=87r1f6q8uktl6ztpuuu83ntda&st=pq4mu9xv&dl=1" type="audio/mpeg">
+                    </audio>
+                    <p style="font-size: 14px; color: #666; margin-top: 10px; font-style: italic;">Click button to play while reading 💕</p>
+                </div>
+                
+                <p style="font-size: 22px; margin-bottom: 25px; text-align: center;"><strong>Happy Valentine's Day, Bachu! 💘💌</strong></p>
+                
+                <p style="margin-bottom: 25px; font-size: 20px; line-height: 1.6; color: #e63946; font-weight: bold; text-align: center; background: linear-gradient(135deg, rgba(255, 107, 157, 0.15), rgba(255, 192, 203, 0.25)); padding: 20px; border-radius: 12px;">
+                ✨ So it's our first Valentine... 💕
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 18px; line-height: 1.7;">I didn't expect ki mera yeh first Valentine aisa jayega... 💭</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Sach batau? 🥺</strong><br><br>
+                Main itne din se soch raha tha... na gift diya, na kuch... ajeeb lagega na?<br><br>
+                <strong style="color: #e63946;">But tumne jo bola...</strong> 💕<br>
+                Ki main jo yeh letters likh likh kar bhejta tha - <strong>that's a gift for you!</strong><br><br>
+                Mujhe pata hi nahi tha ki tum isse as a gift treat karogi... ❤️✨
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7;">But mujhe na isse aise banana tha ki <strong style="color: #e63946;">jab bhi tumhara man kare, tum wapas isse dekh sako!</strong> 💖</p>
+                
+                <p style="margin-bottom: 25px; font-size: 19px; line-height: 1.7; background: rgba(230, 57, 70, 0.08); padding: 20px; border-radius: 15px;">
+                <strong style="color: #e63946;">Our first conversation... 💭</strong><br><br>
+                Started with ki tumse tumhara haal chaal puch liya karunga...<br><br>
+                <strong style="color: #e63946; font-size: 20px;">So tell me, kaisi ho? 😊💕</strong>
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6; color: #e63946; font-weight: bold;">When I recognized you are special... ✨</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                I recognized jab tum mujhe apni life ke baare mein bata rahi thi... <strong style="color: #e63946;">even though I didn't ask!</strong> 💭<br><br>
+                I recognized jab main help maangta tha aur tum same time pe help karti thi... <strong>kuch zyada soche bina!</strong> 💕<br><br>
+                Woh hota hai na - <em>"chalo upar upar se bata diya, baaki khud dekh liyo..."</em><br><br>
+                <strong style="color: #e63946;">But tumne nahi kiya!</strong> Tumne meri har ek choti choti cheez, har doubt solve kiya! 🥺❤️
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7;"><strong style="color: #e63946;">Everytime when I talk, I learn something from you...</strong> 📚✨</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(230, 57, 70, 0.08); padding: 20px; border-radius: 15px;">
+                <strong style="color: #e63946;">Toh tum bolti thi na... 😁</strong><br><br>
+                "Main mature hu, aur kaise ho gaya?"<br><br>
+                <strong style="color: #e63946;">Areh woh toh...</strong> 💭<br><br>
+                Main tumse baat karta toh puchta tha na - how's your friendship, relationships aur all...<br>
+                Fir tum batati, aur main usse samajh kar apne life pe implement karta tha! 💡<br><br>
+                Tumhe yaad hai purani baatein? Thoda yaad karna... maine yeh sab pucha tha ya nahi? 😅<br><br>
+                <em style="font-size: 16px;">(Yeh secret tha 😁... jo ki reveal ho gaya!)</em>
+                </p>
+                
+                <p style="margin-bottom: 20px; font-size: 19px; line-height: 1.6; color: #e63946; font-weight: bold;">Trust... 🤍</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                Trust toh yaar <strong style="color: #e63946;">tumhara hi tha ek dam!</strong><br><br>
+                Matlab itni jaldi ek unknown ko known bana kar, apne baare mein itna bataya...<br>
+                Apne baare mein kya - <strong style="color: #e63946;">exact address bata diya yaar!</strong> 😮<br><br>
+                Aaj ke time koi apna naam tak jaldi nahi batata... <strong>tum early days mein address tak bata di!</strong><br><br>
+                Waha mujhe realize hua - <strong style="color: #e63946;">"She trusts me much more than I expected..."</strong> 🥺💕
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(230, 57, 70, 0.08); padding: 20px; border-radius: 15px;">
+                <strong style="color: #e63946;">Aur haan... attitude wali baat 😁</strong><br><br>
+                Tum bolti thi na ki tumhe sab bolte ki attitude hai, rude ho...<br><br>
+                <strong style="color: #e63946;">Yaar jinme attitude hota hai na, wo rude hote hain!</strong><br>
+                Wo toh dhang se baat bhi nahi karte... bas reply kiya aur "tum kaun, hum kaun" type! 😤<br><br>
+                <strong>Aur tum?</strong> Yaar tum toh khud se hi itna baat kar leti thi! 😊<br>
+                Jo nahi bhi pucha, woh bhi bataya! 💕
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Haan woh sorry... 💭</strong><br><br>
+                Jo rude hote hain na, wo kabhi sorry bolenge hi nahi!<br><br>
+                <strong>Aur tum sorry bolti ho...</strong> mujhe ajeeb lagta hai yaar! 🥺<br><br>
+                Sorry mat bola karo... haan jo tum yeh aaj kal health sahi nahi rehne pe kuch ulte seedhe kar leti ho, <strong style="color: #e63946;">woh sab nahi kiya karo!</strong> ❤️<br><br>
+                <em style="font-size: 16px;">(Haan... sorry ke jagah hug kar liya karna 👀😁)</em><br>
+                <em style="font-size: 16px;">(Karogi na? 🥹)</em>
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 19px; line-height: 1.7; font-style: italic; text-align: center; background: linear-gradient(135deg, rgba(255, 182, 193, 0.2), rgba(255, 218, 185, 0.2)); padding: 20px; border-radius: 12px;">
+                <strong style="color: #e63946; font-size: 20px;">"Shayad kabhi na keh sakoon main tumko,<br>Kahe bina samajh lo tum shayad..."</strong> 🎶
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                Yeh line main tumhe bola tha na... toh tum boli thi:<br>
+                <em>"It's rare ki bina bole koi samajh jaye... it's you!"</em> 💕<br><br>
+                <strong style="color: #e63946;">Kabhi kabhi toh tum na aise pata kar leti...</strong><br>
+                Mujhe lagta hai tumne mere ghar mein CCTV laga rakhi hai! 😂<br><br>
+                Ki koi itna kaise jaan sakta hai! 👀✨
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 19px; line-height: 1.7; color: #e63946; font-weight: bold; text-align: center;">Thank you... 🙏💕</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; text-align: center;">Thanks for being supportive everytime...<br><strong style="color: #e63946;">From the beginning to till now!</strong> 💖✨</p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(230, 57, 70, 0.08); padding: 20px; border-radius: 15px;">
+                <strong style="color: #e63946;">Our bonding itna strong hai... 💪💕</strong><br><br>
+                Aur us time bhi tha jab:<br>
+                ❌ Na hum ek dusre ko dekhe the<br>
+                ❌ Na call pe baat ki thi<br><br>
+                Yeh toh rehta hai na ki <em>"dekh toh lu kaisa friend hai..."</em><br><br>
+                <strong style="color: #e63946;">Wo bhi nahi!</strong> Pure trust pe! 🤍
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; background: rgba(255, 240, 245, 0.6); padding: 20px; border-radius: 15px; border-left: 4px solid #e63946;">
+                <strong style="color: #e63946;">Ek baat hoti hai na... 💭</strong><br><br>
+                Efforts one-sided ho toh kuch time baad aisa feel hone lagta hai...<br>
+                <em>"Yaar sab toh main kar raha, wo nahi kar rahi... wo nahi kar raha..."</em> 😔<br><br>
+                <strong style="color: #e63946;">But yaha?</strong><br><br>
+                <strong>Main jitne efforts karta, usse zyada hi mujhe mila hai!</strong> 🥺💖<br><br>
+                Isliye main us din bola tha ki main so jau tab padhna...<br>
+                Kyunki yaar, same time pe samajh nahi aata tha kya reply karu!<br><br>
+                <strong style="color: #e63946;">Tumhare messages ne mujhe stunned kar diya tha!</strong> 😮💕<br><br>
+                Pyaar toh karti ho, yeh pata tha... <strong>but mujhe nahi pata tha ki itna zyada karti ho!</strong><br><br>
+                Aur yeh bhi nahi laga tha ki tumhe itna pasand aa jayega jo maine likha tha... 🥹<br><br>
+                <strong style="color: #e63946; font-size: 20px;">Thank you so much itna saara pyaar karne ke liye! 💗✨</strong>
+                </p>
+                
+                <p style="margin-bottom: 25px; font-size: 18px; line-height: 1.7; text-align: center;">I am <strong style="color: #e63946;">excited</strong> and feel <strong style="color: #e63946;">nervous</strong> 😅<br>when I think about the day when we will meet each other... 💭💕</p>
+                
+                <p style="margin-bottom: 25px; font-size: 19px; line-height: 1.7; font-style: italic; text-align: center; background: linear-gradient(135deg, rgba(255, 182, 193, 0.2), rgba(255, 218, 185, 0.2)); padding: 20px; border-radius: 12px;">
+                <strong style="color: #e63946; font-size: 20px;">Everytime I feel it's like a dream...<br>Because only in dreams do things like this happen! ✨💫</strong>
+                </p>
+                
+                <p style="font-size: 24px; font-weight: bold; color: #e63946; margin-top: 35px; margin-bottom: 25px; text-align: center; line-height: 1.5;">
+                You're not just my partner,<br>you're my heart! ❤️<br><br>
+                Will you be my Valentine? 👀😁💗
+                </p>
+                
+                <p style="font-style: italic; margin-top: 30px; color: #666; font-size: 17px; text-align: center;">P.S. - Yes, you already are! And you'll be my Valentine not just today, but every single day of forever! Happy Valentine's Day, Bachu! 💘💌✨</p>`
+            }
+        };
+
+        function showMessage(day) {
+            const messageBox = document.getElementById('message-box');
+            const title = document.getElementById('message-title');
+            const content = document.getElementById('message-content');
+            
+            title.textContent = messages[day].title;
+            content.innerHTML = messages[day].content;
+            
+            messageBox.classList.add('show');
+            messageBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Update active card
+            document.querySelectorAll('.day-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        function closeMessage() {
+            document.getElementById('message-box').classList.remove('show');
+        }
+
+        // Create falling petals
+        function createPetal() {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            const petals = ['🌹', '🌺', '🌸', '💮', '💐'];
+            petal.textContent = petals[Math.floor(Math.random() * petals.length)];
+            petal.style.left = Math.random() * 100 + '%';
+            petal.style.animationDuration = (Math.random() * 5 + 10) + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            document.getElementById('petals-bg').appendChild(petal);
+            
+            setTimeout(() => {
+                petal.remove();
+            }, 20000);
+        }
+
+        // Create petals continuously
+        setInterval(createPetal, 1000);
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createPetal, i * 200);
+        }
+    </script>
+</body>
+</html>
